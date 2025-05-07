@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Prediction Results - Sports Predictor{% endblock %}
+{% block title %}Előrejelzés Eredménye - Sport Előrejelző{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -9,7 +9,7 @@
         <div class="card shadow prediction-card mb-4">
             <div class="card-body">
                 <h2 class="card-title">
-                    Prediction Results
+                    Előrejelzés Eredménye
                     <span class="small text-muted float-end">
                         {{ prediction.created_at.strftime('%Y-%m-%d %H:%M') }}
                     </span>
@@ -19,7 +19,7 @@
                     <!-- Home Team -->
                     <div class="col-5 text-center">
                         <div class="team-name text-primary">{{ home_team.name }}</div>
-                        <div class="text-muted small">Home</div>
+                        <div class="text-muted small">Hazai</div>
                     </div>
                     
                     <!-- Score -->
@@ -34,13 +34,13 @@
                     <!-- Away Team -->
                     <div class="col-5 text-center">
                         <div class="team-name text-secondary">{{ away_team.name }}</div>
-                        <div class="text-muted small">Away</div>
+                        <div class="text-muted small">Vendég</div>
                     </div>
                 </div>
                 
                 <!-- Win Probability Bars -->
                 <div class="mb-4">
-                    <h4 class="mb-3">Win Probability</h4>
+                    <h4 class="mb-3">Győzelmi Valószínűség</h4>
                     
                     <!-- Home Win -->
                     <div class="mb-3">
@@ -74,7 +74,7 @@
                     {% if prediction.draw_probability %}
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span class="small">Draw</span>
+                            <span class="small">Döntetlen</span>
                             <span class="probability-value text-accent" id="draw-prob-value">
                                 {{ "%.1f"|format(prediction.draw_probability * 100) }}%
                             </span>
@@ -90,9 +90,9 @@
                 <!-- Prediction Confidence -->
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h4 class="mb-0">Prediction Confidence</h4>
+                        <h4 class="mb-0">Előrejelzés Megbízhatósága</h4>
                         <a href="#" class="confidence-info text-decoration-none small" data-target="#confidence-explanation">
-                            <i class="fas fa-info-circle"></i> What is this?
+                            <i class="fas fa-info-circle"></i> Mi ez?
                         </a>
                     </div>
                     
@@ -102,20 +102,20 @@
                     </div>
                     
                     <div class="confidence-label">
-                        <span>Low</span>
+                        <span>Alacsony</span>
                         <span id="confidence-value">{{ "%.0f"|format(prediction.game.confidence * 100) }}%</span>
-                        <span>High</span>
+                        <span>Magas</span>
                     </div>
                     
                     <div id="confidence-explanation" class="mt-2 small text-muted d-none">
-                        <p>Confidence score is based on:</p>
+                        <p>A megbízhatósági pontszám a következőkön alapul:</p>
                         <ul>
-                            <li>Amount of historical data available</li>
-                            <li>Consistency of team performance</li>
-                            <li>Previous matchups between these teams</li>
-                            <li>Recent form and results</li>
+                            <li>Rendelkezésre álló történelmi adatok mennyisége</li>
+                            <li>Csapat teljesítmény következetessége</li>
+                            <li>Korábbi mérkőzések a csapatok között</li>
+                            <li>Aktuális forma és eredmények</li>
                         </ul>
-                        <p class="mb-0">Higher confidence means our model has more reliable data for this prediction.</p>
+                        <p class="mb-0">Magasabb megbízhatóság azt jelenti, hogy modellünk megbízhatóbb adatokkal rendelkezik ehhez az előrejelzéshez.</p>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
         <!-- Visualization Section -->
         <div class="card shadow mb-4">
             <div class="card-body">
-                <h3 class="card-title">Prediction Visualization</h3>
+                <h3 class="card-title">Előrejelzés Vizualizáció</h3>
                 
                 <!-- Win Probability Chart -->
                 <div class="row">
@@ -160,33 +160,33 @@
         <!-- Game Details -->
         <div class="card shadow mb-4">
             <div class="card-body">
-                <h3 class="card-title">Game Details</h3>
+                <h3 class="card-title">Mérkőzés Részletek</h3>
                 
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
-                        <span>Date</span>
+                        <span>Dátum</span>
                         <span class="mono">{{ game.date.strftime('%Y-%m-%d') }}</span>
                     </li>
                     {% if game.venue %}
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
-                        <span>Venue</span>
+                        <span>Helyszín</span>
                         <span>{{ game.venue }}</span>
                     </li>
                     {% endif %}
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
-                        <span>Home Team</span>
+                        <span>Hazai Csapat</span>
                         <span class="text-primary">{{ home_team.name }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
-                        <span>Away Team</span>
+                        <span>Vendég Csapat</span>
                         <span class="text-secondary">{{ away_team.name }}</span>
                     </li>
                     {% if home_team.division %}
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
-                        <span>Division</span>
+                        <span>Divízió</span>
                         <span>
                             {% if home_team.division == away_team.division %}
-                                {{ home_team.division }} (Same division)
+                                {{ home_team.division }} (Azonos divízió)
                             {% else %}
                                 {{ home_team.division }} vs {{ away_team.division }}
                             {% endif %}
@@ -200,7 +200,7 @@
         <!-- Team Performance -->
         <div class="card shadow mb-4">
             <div class="card-body">
-                <h3 class="card-title">Recent Performance</h3>
+                <h3 class="card-title">Friss Teljesítmény</h3>
                 
                 <!-- Home Team Performance -->
                 <div class="mb-4">
@@ -211,10 +211,10 @@
                             <table class="table table-sm data-table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Opponent</th>
-                                        <th>Predicted</th>
-                                        <th>Actual</th>
+                                        <th>Dátum</th>
+                                        <th>Ellenfél</th>
+                                        <th>Előrejelzett</th>
+                                        <th>Tényleges</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -225,7 +225,7 @@
                                             {% if p.game.home_team_id == home_team.id %}
                                                 {{ p.game.away_team.name }} (H)
                                             {% else %}
-                                                {{ p.game.home_team.name }} (A)
+                                                {{ p.game.home_team.name }} (V)
                                             {% endif %}
                                         </td>
                                         <td>
@@ -252,7 +252,7 @@
                             </table>
                         </div>
                     {% else %}
-                        <p class="text-muted small">No recent performance data available</p>
+                        <p class="text-muted small">Nincs elérhető teljesítmény adat</p>
                     {% endif %}
                 </div>
                 
@@ -265,10 +265,10 @@
                             <table class="table table-sm data-table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Opponent</th>
-                                        <th>Predicted</th>
-                                        <th>Actual</th>
+                                        <th>Dátum</th>
+                                        <th>Ellenfél</th>
+                                        <th>Előrejelzett</th>
+                                        <th>Tényleges</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -279,7 +279,7 @@
                                             {% if p.game.home_team_id == away_team.id %}
                                                 {{ p.game.away_team.name }} (H)
                                             {% else %}
-                                                {{ p.game.home_team.name }} (A)
+                                                {{ p.game.home_team.name }} (V)
                                             {% endif %}
                                         </td>
                                         <td>
@@ -306,7 +306,7 @@
                             </table>
                         </div>
                     {% else %}
-                        <p class="text-muted small">No recent performance data available</p>
+                        <p class="text-muted small">Nincs elérhető teljesítmény adat</p>
                     {% endif %}
                 </div>
             </div>
@@ -318,7 +318,7 @@
 <div class="text-center mt-3">
     <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
         <i class="fas fa-arrow-left me-2"></i>
-        Make Another Prediction
+        Készíts Újabb Előrejelzést
     </a>
 </div>
 {% endblock %}
