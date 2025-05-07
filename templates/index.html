@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% block title %}Home - Sports Predictor{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-pie text-primary me-2"></i>
+                    Sports Game Predictor
+                </h2>
+                <p class="lead">
+                    Get accurate statistical predictions for upcoming sports games based on historical performance data.
+                </p>
+                
+                <hr class="my-4">
+                
+                <form action="{{ url_for('predict') }}" method="post" class="needs-validation" novalidate>
+                    <!-- Teams Selection -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="home_team" class="form-label">Home Team</label>
+                            <select class="form-select team-selector" id="home_team" name="home_team" required>
+                                <option value="" disabled selected>Select home team</option>
+                                {% for team in teams %}
+                                <option value="{{ team.id }}">{{ team.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a home team.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="away_team" class="form-label">Away Team</label>
+                            <select class="form-select team-selector" id="away_team" name="away_team" required>
+                                <option value="" disabled selected>Select away team</option>
+                                {% for team in teams %}
+                                <option value="{{ team.id }}">{{ team.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select an away team.
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div id="team-selection-warning" class="alert alert-warning d-none">
+                                Home and away teams must be different.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Game Details -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="game_date" class="form-label">Game Date</label>
+                            <input type="date" class="form-control" id="game_date" name="game_date" required>
+                            <div class="invalid-feedback">
+                                Please select a valid date.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="venue" class="form-label">Venue</label>
+                            <input type="text" class="form-control" id="venue" name="venue" placeholder="Stadium or Arena">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg mt-3">
+                        <i class="fas fa-calculator me-2"></i>
+                        Generate Prediction
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <!-- How It Works -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-question-circle text-accent me-2"></i>
+                    How It Works
+                </h3>
+                <p>Our prediction model uses:</p>
+                <ul>
+                    <li>Historical game results</li>
+                    <li>Team performance metrics</li>
+                    <li>Head-to-head statistics</li>
+                    <li>Machine learning algorithms</li>
+                </ul>
+                <p class="mb-0">
+                    <a href="{{ url_for('about') }}" class="text-decoration-none">
+                        Learn more about our methodology
+                        <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Recent Predictions -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-history text-secondary me-2"></i>
+                    Recent Predictions
+                </h3>
+                
+                {% set has_predictions = false %}
+                {% for prediction in recent_predictions %}
+                    {% set has_predictions = true %}
+                    <div class="mb-3 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ prediction.game.home_team.name }} vs {{ prediction.game.away_team.name }}</strong>
+                                <div class="text-muted small">{{ prediction.created_at.strftime('%Y-%m-%d') }}</div>
+                            </div>
+                            <div class="text-end mono">
+                                <span class="text-primary">{{ "%.1f"|format(prediction.predicted_home_score) }}</span>
+                                <span>-</span>
+                                <span class="text-secondary">{{ "%.1f"|format(prediction.predicted_away_score) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                {% if not has_predictions %}
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">No predictions yet</p>
+                        <p class="small">Make your first prediction above!</p>
+                    </div>
+                {% endif %}
+                
+                <a href="{{ url_for('history') }}" class="btn btn-outline-primary btn-sm d-block mt-2">
+                    View All Predictions
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

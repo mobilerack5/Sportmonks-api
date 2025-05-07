@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% block title %}About - Sports Predictor{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-body p-md-5">
+                <h2 class="card-title text-center mb-4">About Sports Predictor</h2>
+                
+                <div class="mb-5">
+                    <h3>
+                        <i class="fas fa-chart-line text-primary me-2"></i>
+                        Our Approach
+                    </h3>
+                    <p>
+                        Sports Predictor uses machine learning and statistical analysis to predict the outcomes of sports games. 
+                        Our approach is inspired by data journalism sites like FiveThirtyEight, focusing on clear presentation 
+                        of statistical information and prediction confidence.
+                    </p>
+                    <p>
+                        We believe in transparent predictive modeling, where users can understand not just what might happen, 
+                        but why our model believes it will happen and how confident we are in that prediction.
+                    </p>
+                </div>
+                
+                <div class="mb-5">
+                    <h3>
+                        <i class="fas fa-brain text-accent me-2"></i>
+                        The Prediction Model
+                    </h3>
+                    <p>
+                        Our prediction model uses a combination of:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Historical Game Data:</strong> Past performance between teams, including scores, 
+                            margins of victory, and game conditions.
+                        </li>
+                        <li>
+                            <strong>Team Performance Metrics:</strong> Offensive and defensive ratings, recent form, 
+                            and home/away performance differentials.
+                        </li>
+                        <li>
+                            <strong>Machine Learning:</strong> Random Forest regression models that learn patterns from 
+                            historical data and improve over time.
+                        </li>
+                        <li>
+                            <strong>Bayesian Probability:</strong> Confidence intervals that express prediction certainty 
+                            based on available data.
+                        </li>
+                    </ul>
+                    <p>
+                        As more game results come in, our model automatically learns and improves its predictive capabilities.
+                    </p>
+                </div>
+                
+                <div class="mb-5">
+                    <h3>
+                        <i class="fas fa-chart-pie text-secondary me-2"></i>
+                        Understanding Predictions
+                    </h3>
+                    
+                    <div class="card bg-light mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Score Prediction</h5>
+                            <p>
+                                Our model predicts the most likely final score for each team. These are expressed as decimal 
+                                values (like 105.3 points) to represent the expected average if the game were played many times 
+                                under identical conditions.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-light mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Win Probability</h5>
+                            <p>
+                                Win probabilities represent the likelihood of each outcome. For example, a 65% chance for Team A 
+                                means that if this exact game were played 100 times, Team A would win approximately 65 of those games.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">Confidence Score</h5>
+                            <p>
+                                The confidence score indicates how much reliable data our model has to make this particular prediction. 
+                                Higher confidence means more relevant historical data and more consistent patterns.
+                            </p>
+                            <p class="mb-0">
+                                <strong>Low confidence</strong> predictions may still be accurate, but have more uncertainty due to 
+                                limited data or highly variable past performance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h3>
+                        <i class="fas fa-code text-primary me-2"></i>
+                        Technical Implementation
+                    </h3>
+                    <p>
+                        Sports Predictor is built with:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Backend:</strong> Flask web framework with SQLAlchemy for database interactions
+                        </li>
+                        <li>
+                            <strong>Machine Learning:</strong> scikit-learn for model training and prediction
+                        </li>
+                        <li>
+                            <strong>Data Processing:</strong> pandas and NumPy for statistical analysis
+                        </li>
+                        <li>
+                            <strong>Visualization:</strong> Chart.js for interactive data visualization
+                        </li>
+                        <li>
+                            <strong>Frontend:</strong> HTML5, CSS3, and JavaScript with Bootstrap 5 for responsive design
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="text-center mt-5 pt-3 border-top">
+                    <p class="text-muted">
+                        Sports Predictor is designed to provide statistical insights, not gambling advice.
+                        All predictions are probabilistic in nature and represent expected outcomes based on historical data.
+                    </p>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary mt-2">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Back to Predictions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

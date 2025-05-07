@@ -1,0 +1,303 @@
+/* FiveThirtyEight-inspired Sports Prediction App Styling */
+
+/* Base styles and typography */
+:root {
+    --primary-color: #2962FF;
+    --secondary-color: #FF6B6B;
+    --background-color: #F8F9FA;
+    --text-color: #212529;
+    --accent-color: #38B2AC;
+    --light-gray: #E9ECEF;
+    --medium-gray: #CED4DA;
+    --dark-gray: #6C757D;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --font-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-mono: 'Roboto Mono', 'Courier New', Courier, monospace;
+    --standard-padding: 16px;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.mono {
+    font-family: var(--font-mono);
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--standard-padding);
+}
+
+.content-section {
+    margin-bottom: 2rem;
+}
+
+/* Card Styling (FiveThirtyEight-inspired) */
+.card {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: var(--box-shadow);
+    padding: var(--standard-padding);
+    margin-bottom: 1.5rem;
+    border: none;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    border-bottom: 2px solid var(--light-gray);
+    padding-bottom: 0.5rem;
+}
+
+.card-header {
+    font-weight: bold;
+    background-color: #fff;
+    border-bottom: 2px solid var(--light-gray);
+    padding: 1rem var(--standard-padding);
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.nav-link {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.nav-link:hover, .nav-link:focus {
+    color: var(--primary-color);
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+/* Button styling */
+.btn {
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #1a54f7;
+    border-color: #1a54f7;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+    background-color: #ff5252;
+    border-color: #ff5252;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.btn-accent:hover, .btn-accent:focus {
+    background-color: #2da399;
+    border-color: #2da399;
+    color: white;
+}
+
+/* Form styling */
+.form-control {
+    border: 1px solid var(--medium-gray);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(41, 98, 255, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Prediction specific styling */
+.prediction-card {
+    border-left: 4px solid var(--primary-color);
+}
+
+.prediction-result {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    font-family: var(--font-mono);
+}
+
+.team-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.probability-bar {
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.probability-bar-home {
+    background-color: var(--primary-color);
+}
+
+.probability-bar-away {
+    background-color: var(--secondary-color);
+}
+
+.probability-bar-draw {
+    background-color: var(--accent-color);
+}
+
+.probability-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+}
+
+/* Data visualization styles */
+.chart-container {
+    height: 400px;
+    margin-bottom: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .prediction-result {
+        font-size: 2rem;
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+}
+
+/* Stats and metrics styling */
+.stat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--dark-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* FiveThirtyEight-style tables */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 2px solid var(--medium-gray);
+    font-weight: 600;
+}
+
+.data-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tr:hover {
+    background-color: rgba(41, 98, 255, 0.05);
+}
+
+/* Utility classes */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-secondary {
+    color: var(--secondary-color) !important;
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.bg-primary-light {
+    background-color: rgba(41, 98, 255, 0.1);
+}
+
+.bg-secondary-light {
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* Confidence meter */
+.confidence-meter {
+    width: 100%;
+    height: 8px;
+    background-color: var(--light-gray);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.confidence-meter-fill {
+    height: 100%;
+    background-color: var(--accent-color);
+}
+
+.confidence-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--dark-gray);
+}

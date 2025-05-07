@@ -1,0 +1,334 @@
+{% extends "layout.html" %}
+
+{% block title %}Prediction Results - Sports Predictor{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Main Prediction Card -->
+        <div class="card shadow prediction-card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">
+                    Prediction Results
+                    <span class="small text-muted float-end">
+                        {{ prediction.created_at.strftime('%Y-%m-%d %H:%M') }}
+                    </span>
+                </h2>
+                
+                <div class="row align-items-center mb-4">
+                    <!-- Home Team -->
+                    <div class="col-5 text-center">
+                        <div class="team-name text-primary">{{ home_team.name }}</div>
+                        <div class="text-muted small">Home</div>
+                    </div>
+                    
+                    <!-- Score -->
+                    <div class="col-2 text-center">
+                        <div class="prediction-result">
+                            <span class="text-primary">{{ "%.1f"|format(prediction.predicted_home_score) }}</span>
+                            <span class="text-muted">-</span>
+                            <span class="text-secondary">{{ "%.1f"|format(prediction.predicted_away_score) }}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Away Team -->
+                    <div class="col-5 text-center">
+                        <div class="team-name text-secondary">{{ away_team.name }}</div>
+                        <div class="text-muted small">Away</div>
+                    </div>
+                </div>
+                
+                <!-- Win Probability Bars -->
+                <div class="mb-4">
+                    <h4 class="mb-3">Win Probability</h4>
+                    
+                    <!-- Home Win -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">{{ home_team.name }}</span>
+                            <span class="probability-value text-primary" id="home-prob-value">
+                                {{ "%.1f"|format(prediction.home_win_probability * 100) }}%
+                            </span>
+                        </div>
+                        <div class="probability-bar-container bg-light rounded">
+                            <div class="probability-bar probability-bar-home" id="home-prob-bar" 
+                                 style="width: {{ prediction.home_win_probability * 100 }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Away Win -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">{{ away_team.name }}</span>
+                            <span class="probability-value text-secondary" id="away-prob-value">
+                                {{ "%.1f"|format(prediction.away_win_probability * 100) }}%
+                            </span>
+                        </div>
+                        <div class="probability-bar-container bg-light rounded">
+                            <div class="probability-bar probability-bar-away" id="away-prob-bar" 
+                                 style="width: {{ prediction.away_win_probability * 100 }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Draw (if applicable) -->
+                    {% if prediction.draw_probability %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">Draw</span>
+                            <span class="probability-value text-accent" id="draw-prob-value">
+                                {{ "%.1f"|format(prediction.draw_probability * 100) }}%
+                            </span>
+                        </div>
+                        <div class="probability-bar-container bg-light rounded">
+                            <div class="probability-bar probability-bar-draw" id="draw-prob-bar" 
+                                 style="width: {{ prediction.draw_probability * 100 }}%"></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Prediction Confidence -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h4 class="mb-0">Prediction Confidence</h4>
+                        <a href="#" class="confidence-info text-decoration-none small" data-target="#confidence-explanation">
+                            <i class="fas fa-info-circle"></i> What is this?
+                        </a>
+                    </div>
+                    
+                    <div class="confidence-meter">
+                        <div class="confidence-meter-fill" id="confidence-meter-fill" 
+                             style="width: {{ prediction.game.confidence * 100 }}%"></div>
+                    </div>
+                    
+                    <div class="confidence-label">
+                        <span>Low</span>
+                        <span id="confidence-value">{{ "%.0f"|format(prediction.game.confidence * 100) }}%</span>
+                        <span>High</span>
+                    </div>
+                    
+                    <div id="confidence-explanation" class="mt-2 small text-muted d-none">
+                        <p>Confidence score is based on:</p>
+                        <ul>
+                            <li>Amount of historical data available</li>
+                            <li>Consistency of team performance</li>
+                            <li>Previous matchups between these teams</li>
+                            <li>Recent form and results</li>
+                        </ul>
+                        <p class="mb-0">Higher confidence means our model has more reliable data for this prediction.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Visualization Section -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Prediction Visualization</h3>
+                
+                <!-- Win Probability Chart -->
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-container">
+                            <canvas id="probability-chart" 
+                                    data-home-prob="{{ prediction.home_win_probability }}"
+                                    data-away-prob="{{ prediction.away_win_probability }}"
+                                    data-draw-prob="{{ prediction.draw_probability }}"
+                                    data-home-team="{{ home_team.name }}"
+                                    data-away-team="{{ away_team.name }}"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Score Prediction Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-container">
+                            <canvas id="score-chart"
+                                    data-home-team="{{ home_team.name }}"
+                                    data-away-team="{{ away_team.name }}"
+                                    data-predicted-home="{{ prediction.predicted_home_score }}"
+                                    data-predicted-away="{{ prediction.predicted_away_score }}"
+                                    data-actual-home="{{ game.home_score }}"
+                                    data-actual-away="{{ game.away_score }}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Game Details -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Game Details</h3>
+                
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Date</span>
+                        <span class="mono">{{ game.date.strftime('%Y-%m-%d') }}</span>
+                    </li>
+                    {% if game.venue %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Venue</span>
+                        <span>{{ game.venue }}</span>
+                    </li>
+                    {% endif %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Home Team</span>
+                        <span class="text-primary">{{ home_team.name }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Away Team</span>
+                        <span class="text-secondary">{{ away_team.name }}</span>
+                    </li>
+                    {% if home_team.division %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Division</span>
+                        <span>
+                            {% if home_team.division == away_team.division %}
+                                {{ home_team.division }} (Same division)
+                            {% else %}
+                                {{ home_team.division }} vs {{ away_team.division }}
+                            {% endif %}
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Team Performance -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Recent Performance</h3>
+                
+                <!-- Home Team Performance -->
+                <div class="mb-4">
+                    <h5 class="text-primary">{{ home_team.name }}</h5>
+                    
+                    {% if recent_home_predictions %}
+                        <div class="table-responsive">
+                            <table class="table table-sm data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Opponent</th>
+                                        <th>Predicted</th>
+                                        <th>Actual</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in recent_home_predictions %}
+                                    <tr>
+                                        <td>{{ p.created_at.strftime('%m/%d') }}</td>
+                                        <td>
+                                            {% if p.game.home_team_id == home_team.id %}
+                                                {{ p.game.away_team.name }} (H)
+                                            {% else %}
+                                                {{ p.game.home_team.name }} (A)
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if p.game.home_team_id == home_team.id %}
+                                                {{ "%.1f"|format(p.predicted_home_score) }}
+                                            {% else %}
+                                                {{ "%.1f"|format(p.predicted_away_score) }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if p.game.home_score is not none %}
+                                                {% if p.game.home_team_id == home_team.id %}
+                                                    {{ p.game.home_score }}
+                                                {% else %}
+                                                    {{ p.game.away_score }}
+                                                {% endif %}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted small">No recent performance data available</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Away Team Performance -->
+                <div>
+                    <h5 class="text-secondary">{{ away_team.name }}</h5>
+                    
+                    {% if recent_away_predictions %}
+                        <div class="table-responsive">
+                            <table class="table table-sm data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Opponent</th>
+                                        <th>Predicted</th>
+                                        <th>Actual</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in recent_away_predictions %}
+                                    <tr>
+                                        <td>{{ p.created_at.strftime('%m/%d') }}</td>
+                                        <td>
+                                            {% if p.game.home_team_id == away_team.id %}
+                                                {{ p.game.away_team.name }} (H)
+                                            {% else %}
+                                                {{ p.game.home_team.name }} (A)
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if p.game.home_team_id == away_team.id %}
+                                                {{ "%.1f"|format(p.predicted_home_score) }}
+                                            {% else %}
+                                                {{ "%.1f"|format(p.predicted_away_score) }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if p.game.home_score is not none %}
+                                                {% if p.game.home_team_id == away_team.id %}
+                                                    {{ p.game.home_score }}
+                                                {% else %}
+                                                    {{ p.game.away_score }}
+                                                {% endif %}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted small">No recent performance data available</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Return to home button -->
+<div class="text-center mt-3">
+    <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i>
+        Make Another Prediction
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Initialize the charts when the DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Variables are already set via data attributes on the canvas elements
+    // The charts.js script will handle initialization
+});
+</script>
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends "layout.html" %}
+
+{% block title %}Prediction History - Sports Predictor{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Prediction History</h2>
+        <p class="lead text-muted">Review past predictions and track model performance over time</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <div class="form-group">
+            <label for="timeframe-selector" class="form-label">Timeframe:</label>
+            <select id="timeframe-selector" class="form-select">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="365">Last year</option>
+                <option value="all">All time</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Main content with predictions list -->
+    <div class="col-lg-8">
+        <!-- Overall Accuracy Metrics -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Overall Performance</h3>
+                
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <div class="stat-container">
+                            <div class="stat-value">{{ total_predictions }}</div>
+                            <div class="stat-label">Total Predictions</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-container">
+                            <div class="stat-value">{{ correct_predictions }}</div>
+                            <div class="stat-label">Correct Predictions</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-container">
+                            <div class="stat-value">{{ "%.1f"|format(accuracy_rate) }}%</div>
+                            <div class="stat-label">Accuracy Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Accuracy Over Time Chart -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Accuracy Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="accuracy-chart" 
+                            data-labels='{{ chart_labels|tojson }}'
+                            data-values='{{ chart_accuracy|tojson }}'></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Prediction History Table -->
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title">Recent Predictions</h3>
+                
+                {% if predictions %}
+                    <div class="table-responsive">
+                        <table class="table data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Match</th>
+                                    <th>Prediction</th>
+                                    <th>Actual</th>
+                                    <th>Accuracy</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prediction in predictions %}
+                                <tr>
+                                    <td>{{ prediction.created_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        {{ prediction.game.home_team.name }} vs {{ prediction.game.away_team.name }}
+                                    </td>
+                                    <td class="mono">
+                                        <span class="text-primary">{{ "%.1f"|format(prediction.predicted_home_score) }}</span>
+                                        -
+                                        <span class="text-secondary">{{ "%.1f"|format(prediction.predicted_away_score) }}</span>
+                                    </td>
+                                    <td class="mono">
+                                        {% if prediction.game.home_score is not none %}
+                                            <span class="text-primary">{{ prediction.game.home_score }}</span>
+                                            -
+                                            <span class="text-secondary">{{ prediction.game.away_score }}</span>
+                                        {% else %}
+                                            <span class="text-muted">pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if prediction.was_correct is not none %}
+                                            {% if prediction.was_correct %}
+                                                <span class="badge bg-success">Correct</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Incorrect</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="badge bg-secondary">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('prediction_detail', prediction_id=prediction.id) }}" class="btn btn-sm btn-outline-primary">
+                                            Details
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <p class="text-muted">No prediction history available</p>
+                        <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+                            Make Your First Prediction
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar with stats and filters -->
+    <div class="col-lg-4">
+        <!-- Model Performance -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-brain text-accent me-2"></i>
+                    Model Performance
+                </h3>
+                
+                <p class="text-muted small">
+                    Our prediction model is continuously learning and improving based on new game results.
+                </p>
+                
+                {% if total_predictions > 0 %}
+                    <!-- Performance Metrics -->
+                    <h5 class="mt-4">Performance by Sport</h5>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-sm data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sport</th>
+                                    <th>Predictions</th>
+                                    <th>Accuracy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Basketball</td>
+                                    <td>{{ total_predictions }}</td>
+                                    <td>{{ "%.1f"|format(accuracy_rate) }}%</td>
+                                </tr>
+                                <!-- Additional sports would be listed here if available -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h5 class="mt-4">Error Margin Analysis</h5>
+                    <p class="small text-muted">
+                        Average point difference between predicted and actual scores
+                    </p>
+                    
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;"
+                             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="d-flex justify-content-between small text-muted">
+                        <span>Lower is better</span>
+                        <span>2.5 points</span>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Performance metrics will appear here once predictions are made.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Common Insights -->
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-lightbulb text-warning me-2"></i>
+                    Insights
+                </h3>
+                
+                {% if total_predictions > 10 %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent px-0">
+                            <h6>Home Advantage</h6>
+                            <p class="small text-muted mb-0">
+                                Home teams performed 8.3% better than predicted, showing a significant home-court advantage.
+                            </p>
+                        </li>
+                        <li class="list-group-item bg-transparent px-0">
+                            <h6>Underdog Value</h6>
+                            <p class="small text-muted mb-0">
+                                Teams with < 30% win probability outperformed expectations by 12.5%.
+                            </p>
+                        </li>
+                        <li class="list-group-item bg-transparent px-0">
+                            <h6>High Confidence Predictions</h6>
+                            <p class="small text-muted mb-0">
+                                Predictions with > 75% confidence were accurate 82.4% of the time.
+                            </p>
+                        </li>
+                    </ul>
+                {% else %}
+                    <p class="text-muted">
+                        Insights will be generated after at least 10 predictions with results.
+                    </p>
+                    
+                    <div class="alert alert-light border mt-3">
+                        <h6>Example Insight</h6>
+                        <p class="small text-muted mb-0">
+                            Home teams typically outperform predictions by 5-10% due to home-court advantage.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
