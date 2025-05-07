@@ -1,98 +1,98 @@
 {% extends "layout.html" %}
 
-{% block title %}About - Sports Predictor{% endblock %}
+{% block title %}Rólunk - Sport Előrejelző{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-8 mx-auto">
         <div class="card shadow">
             <div class="card-body p-md-5">
-                <h2 class="card-title text-center mb-4">About Sports Predictor</h2>
+                <h2 class="card-title text-center mb-4">A Sport Előrejelzőről</h2>
                 
                 <div class="mb-5">
                     <h3>
                         <i class="fas fa-chart-line text-primary me-2"></i>
-                        Our Approach
+                        Megközelítésünk
                     </h3>
                     <p>
-                        Sports Predictor uses machine learning and statistical analysis to predict the outcomes of sports games. 
-                        Our approach is inspired by data journalism sites like FiveThirtyEight, focusing on clear presentation 
-                        of statistical information and prediction confidence.
+                        A Sport Előrejelző gépi tanulást és statisztikai elemzést használ a sportesemények kimenetelének előrejelzéséhez. 
+                        Megközelítésünket olyan adatalapú újságírói oldalak inspirálták, mint a FiveThirtyEight, hangsúlyt fektetve a statisztikai 
+                        információk és az előrejelzések megbízhatóságának világos bemutatására.
                     </p>
                     <p>
-                        We believe in transparent predictive modeling, where users can understand not just what might happen, 
-                        but why our model believes it will happen and how confident we are in that prediction.
+                        Hiszünk az átlátható előrejelzési modellekben, ahol a felhasználók nem csak azt érthetik meg, hogy mi történhet, 
+                        hanem azt is, hogy modellünk miért hiszi, hogy ez fog bekövetkezni, és milyen mértékben bízunk ebben az előrejelzésben.
                     </p>
                 </div>
                 
                 <div class="mb-5">
                     <h3>
                         <i class="fas fa-brain text-accent me-2"></i>
-                        The Prediction Model
+                        Az Előrejelzési Modell
                     </h3>
                     <p>
-                        Our prediction model uses a combination of:
+                        Előrejelzési modellünk a következők kombinációját használja:
                     </p>
                     <ul>
                         <li>
-                            <strong>Historical Game Data:</strong> Past performance between teams, including scores, 
-                            margins of victory, and game conditions.
+                            <strong>Történelmi Játékadatok:</strong> A csapatok korábbi teljesítménye, beleértve a pontszámokat, 
+                            a győzelmi különbségeket és a mérkőzés körülményeit.
                         </li>
                         <li>
-                            <strong>Team Performance Metrics:</strong> Offensive and defensive ratings, recent form, 
-                            and home/away performance differentials.
+                            <strong>Csapat Teljesítményi Mutatók:</strong> Támadó és védekező értékelések, jelenlegi forma, 
+                            és hazai/vendég teljesítménykülönbségek.
                         </li>
                         <li>
-                            <strong>Machine Learning:</strong> Random Forest regression models that learn patterns from 
-                            historical data and improve over time.
+                            <strong>Gépi Tanulás:</strong> Random Forest regressziós modellek, amelyek mintákat tanulnak a 
+                            történelmi adatokból és idővel fejlődnek.
                         </li>
                         <li>
-                            <strong>Bayesian Probability:</strong> Confidence intervals that express prediction certainty 
-                            based on available data.
+                            <strong>Bayes-i Valószínűség:</strong> Konfidencia intervallumok, amelyek az előrejelzés bizonyosságát 
+                            fejezik ki a rendelkezésre álló adatok alapján.
                         </li>
                     </ul>
                     <p>
-                        As more game results come in, our model automatically learns and improves its predictive capabilities.
+                        Ahogy több mérkőzés eredménye érkezik be, modellünk automatikusan tanul és fejleszti előrejelző képességeit.
                     </p>
                 </div>
                 
                 <div class="mb-5">
                     <h3>
                         <i class="fas fa-chart-pie text-secondary me-2"></i>
-                        Understanding Predictions
+                        Az Előrejelzések Megértése
                     </h3>
                     
                     <div class="card bg-light mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">Score Prediction</h5>
+                            <h5 class="card-title">Pontszám Előrejelzés</h5>
                             <p>
-                                Our model predicts the most likely final score for each team. These are expressed as decimal 
-                                values (like 105.3 points) to represent the expected average if the game were played many times 
-                                under identical conditions.
+                                Modellünk előrejelzi minden csapat legvalószínűbb végső pontszámát. Ezeket tizedes értékekként 
+                                fejezzük ki (például 105,3 pont), hogy reprezentáljuk a várható átlagot, ha a mérkőzést többször 
+                                játszanák le azonos körülmények között.
                             </p>
                         </div>
                     </div>
                     
                     <div class="card bg-light mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">Win Probability</h5>
+                            <h5 class="card-title">Győzelmi Valószínűség</h5>
                             <p>
-                                Win probabilities represent the likelihood of each outcome. For example, a 65% chance for Team A 
-                                means that if this exact game were played 100 times, Team A would win approximately 65 of those games.
+                                A győzelmi valószínűségek az egyes kimenetelek bekövetkezésének esélyét mutatják. Például egy 65%-os esély az "A" csapatnak 
+                                azt jelenti, hogy ha ezt a pontos mérkőzést 100-szor játszanák le, az "A" csapat körülbelül 65 alkalommal nyerne.
                             </p>
                         </div>
                     </div>
                     
                     <div class="card bg-light">
                         <div class="card-body">
-                            <h5 class="card-title">Confidence Score</h5>
+                            <h5 class="card-title">Megbízhatósági Pontszám</h5>
                             <p>
-                                The confidence score indicates how much reliable data our model has to make this particular prediction. 
-                                Higher confidence means more relevant historical data and more consistent patterns.
+                                A megbízhatósági pontszám azt jelzi, hogy modellünknek mennyi megbízható adata van ehhez a konkrét előrejelzéshez. 
+                                Magasabb megbízhatóság több releváns történelmi adatot és következetesebb mintázatokat jelent.
                             </p>
                             <p class="mb-0">
-                                <strong>Low confidence</strong> predictions may still be accurate, but have more uncertainty due to 
-                                limited data or highly variable past performance.
+                                Az <strong>alacsony megbízhatóságú</strong> előrejelzések is lehetnek pontosak, de nagyobb bizonytalansággal rendelkeznek a 
+                                korlátozott adatok vagy a nagyon változó korábbi teljesítmény miatt.
                             </p>
                         </div>
                     </div>
@@ -101,38 +101,38 @@
                 <div class="mb-4">
                     <h3>
                         <i class="fas fa-code text-primary me-2"></i>
-                        Technical Implementation
+                        Technikai Megvalósítás
                     </h3>
                     <p>
-                        Sports Predictor is built with:
+                        A Sport Előrejelző a következőkkel készült:
                     </p>
                     <ul>
                         <li>
-                            <strong>Backend:</strong> Flask web framework with SQLAlchemy for database interactions
+                            <strong>Backend:</strong> Flask webes keretrendszer SQLAlchemy-vel adatbázis interakciókhoz
                         </li>
                         <li>
-                            <strong>Machine Learning:</strong> scikit-learn for model training and prediction
+                            <strong>Gépi Tanulás:</strong> scikit-learn a modell betanításához és előrejelzéshez
                         </li>
                         <li>
-                            <strong>Data Processing:</strong> pandas and NumPy for statistical analysis
+                            <strong>Adatfeldolgozás:</strong> pandas és NumPy a statisztikai elemzéshez
                         </li>
                         <li>
-                            <strong>Visualization:</strong> Chart.js for interactive data visualization
+                            <strong>Vizualizáció:</strong> Chart.js az interaktív adatvizualizációhoz
                         </li>
                         <li>
-                            <strong>Frontend:</strong> HTML5, CSS3, and JavaScript with Bootstrap 5 for responsive design
+                            <strong>Frontend:</strong> HTML5, CSS3 és JavaScript Bootstrap 5-tel a reszponzív designhoz
                         </li>
                     </ul>
                 </div>
                 
                 <div class="text-center mt-5 pt-3 border-top">
                     <p class="text-muted">
-                        Sports Predictor is designed to provide statistical insights, not gambling advice.
-                        All predictions are probabilistic in nature and represent expected outcomes based on historical data.
+                        A Sport Előrejelző statisztikai betekintést nyújt, nem szerencsejáték-tanácsadást.
+                        Minden előrejelzés valószínűségi jellegű és a történelmi adatok alapján várható kimeneteleket reprezentál.
                     </p>
                     <a href="{{ url_for('index') }}" class="btn btn-primary mt-2">
                         <i class="fas fa-arrow-left me-2"></i>
-                        Back to Predictions
+                        Vissza az Előrejelzésekhez
                     </a>
                 </div>
             </div>

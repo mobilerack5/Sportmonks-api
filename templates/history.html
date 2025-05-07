@@ -1,22 +1,22 @@
 {% extends "layout.html" %}
 
-{% block title %}Prediction History - Sports Predictor{% endblock %}
+{% block title %}Előrejelzési Előzmények - Sport Előrejelző{% endblock %}
 
 {% block content %}
 <div class="row mb-4">
     <div class="col-md-8">
-        <h2>Prediction History</h2>
-        <p class="lead text-muted">Review past predictions and track model performance over time</p>
+        <h2>Előrejelzési Előzmények</h2>
+        <p class="lead text-muted">Tekintsd át a korábbi előrejelzéseket és kövesd a modell teljesítményét időben</p>
     </div>
     <div class="col-md-4 text-md-end">
         <div class="form-group">
-            <label for="timeframe-selector" class="form-label">Timeframe:</label>
+            <label for="timeframe-selector" class="form-label">Időkeret:</label>
             <select id="timeframe-selector" class="form-select">
-                <option value="7">Last 7 days</option>
-                <option value="30" selected>Last 30 days</option>
-                <option value="90">Last 90 days</option>
-                <option value="365">Last year</option>
-                <option value="all">All time</option>
+                <option value="7">Utolsó 7 nap</option>
+                <option value="30" selected>Utolsó 30 nap</option>
+                <option value="90">Utolsó 90 nap</option>
+                <option value="365">Utolsó év</option>
+                <option value="all">Teljes időszak</option>
             </select>
         </div>
     </div>
@@ -28,25 +28,25 @@
         <!-- Overall Accuracy Metrics -->
         <div class="card shadow mb-4">
             <div class="card-body">
-                <h3 class="card-title">Overall Performance</h3>
+                <h3 class="card-title">Általános Teljesítmény</h3>
                 
                 <div class="row text-center">
                     <div class="col-md-4">
                         <div class="stat-container">
                             <div class="stat-value">{{ total_predictions }}</div>
-                            <div class="stat-label">Total Predictions</div>
+                            <div class="stat-label">Összes Előrejelzés</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="stat-container">
                             <div class="stat-value">{{ correct_predictions }}</div>
-                            <div class="stat-label">Correct Predictions</div>
+                            <div class="stat-label">Helyes Előrejelzések</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="stat-container">
                             <div class="stat-value">{{ "%.1f"|format(accuracy_rate) }}%</div>
-                            <div class="stat-label">Accuracy Rate</div>
+                            <div class="stat-label">Pontossági Arány</div>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
         <!-- Accuracy Over Time Chart -->
         <div class="card shadow mb-4">
             <div class="card-body">
-                <h3 class="card-title">Accuracy Over Time</h3>
+                <h3 class="card-title">Pontosság Időbeli Alakulása</h3>
                 <div class="chart-container">
                     <canvas id="accuracy-chart" 
                             data-labels='{{ chart_labels|tojson }}'
@@ -68,18 +68,18 @@
         <!-- Prediction History Table -->
         <div class="card shadow">
             <div class="card-body">
-                <h3 class="card-title">Recent Predictions</h3>
+                <h3 class="card-title">Legutóbbi Előrejelzések</h3>
                 
                 {% if predictions %}
                     <div class="table-responsive">
                         <table class="table data-table">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Match</th>
-                                    <th>Prediction</th>
-                                    <th>Actual</th>
-                                    <th>Accuracy</th>
+                                    <th>Dátum</th>
+                                    <th>Mérkőzés</th>
+                                    <th>Előrejelzés</th>
+                                    <th>Tényleges</th>
+                                    <th>Pontosság</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -101,23 +101,23 @@
                                             -
                                             <span class="text-secondary">{{ prediction.game.away_score }}</span>
                                         {% else %}
-                                            <span class="text-muted">pending</span>
+                                            <span class="text-muted">függőben</span>
                                         {% endif %}
                                     </td>
                                     <td>
                                         {% if prediction.was_correct is not none %}
                                             {% if prediction.was_correct %}
-                                                <span class="badge bg-success">Correct</span>
+                                                <span class="badge bg-success">Helyes</span>
                                             {% else %}
-                                                <span class="badge bg-danger">Incorrect</span>
+                                                <span class="badge bg-danger">Helytelen</span>
                                             {% endif %}
                                         {% else %}
-                                            <span class="badge bg-secondary">Pending</span>
+                                            <span class="badge bg-secondary">Függőben</span>
                                         {% endif %}
                                     </td>
                                     <td>
                                         <a href="{{ url_for('prediction_detail', prediction_id=prediction.id) }}" class="btn btn-sm btn-outline-primary">
-                                            Details
+                                            Részletek
                                         </a>
                                     </td>
                                 </tr>
@@ -127,9 +127,9 @@
                     </div>
                 {% else %}
                     <div class="text-center py-5">
-                        <p class="text-muted">No prediction history available</p>
+                        <p class="text-muted">Nincs elérhető előrejelzési előzmény</p>
                         <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
-                            Make Your First Prediction
+                            Készítsd El Az Első Előrejelzésed
                         </a>
                     </div>
                 {% endif %}
@@ -144,29 +144,29 @@
             <div class="card-body">
                 <h3 class="card-title">
                     <i class="fas fa-brain text-accent me-2"></i>
-                    Model Performance
+                    Modell Teljesítmény
                 </h3>
                 
                 <p class="text-muted small">
-                    Our prediction model is continuously learning and improving based on new game results.
+                    Az előrejelzési modellünk folyamatosan tanul és fejlődik az új mérkőzés eredmények alapján.
                 </p>
                 
                 {% if total_predictions > 0 %}
                     <!-- Performance Metrics -->
-                    <h5 class="mt-4">Performance by Sport</h5>
+                    <h5 class="mt-4">Teljesítmény Sport Szerint</h5>
                     
                     <div class="table-responsive">
                         <table class="table table-sm data-table">
                             <thead>
                                 <tr>
                                     <th>Sport</th>
-                                    <th>Predictions</th>
-                                    <th>Accuracy</th>
+                                    <th>Előrejelzések</th>
+                                    <th>Pontosság</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Basketball</td>
+                                    <td>Kosárlabda</td>
                                     <td>{{ total_predictions }}</td>
                                     <td>{{ "%.1f"|format(accuracy_rate) }}%</td>
                                 </tr>
@@ -175,9 +175,9 @@
                         </table>
                     </div>
                     
-                    <h5 class="mt-4">Error Margin Analysis</h5>
+                    <h5 class="mt-4">Hibaszázalék Elemzés</h5>
                     <p class="small text-muted">
-                        Average point difference between predicted and actual scores
+                        Átlagos pontszám különbség az előrejelzett és tényleges eredmények között
                     </p>
                     
                     <div class="progress mb-3" style="height: 10px;">
@@ -185,13 +185,13 @@
                              aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="d-flex justify-content-between small text-muted">
-                        <span>Lower is better</span>
-                        <span>2.5 points</span>
+                        <span>Alacsonyabb jobb</span>
+                        <span>2.5 pont</span>
                     </div>
                 {% else %}
                     <div class="alert alert-info mt-3">
                         <i class="fas fa-info-circle me-2"></i>
-                        Performance metrics will appear here once predictions are made.
+                        A teljesítmény metrikák itt jelennek meg, miután készültek előrejelzések.
                     </div>
                 {% endif %}
             </div>
@@ -202,39 +202,39 @@
             <div class="card-body">
                 <h3 class="card-title">
                     <i class="fas fa-lightbulb text-warning me-2"></i>
-                    Insights
+                    Meglátások
                 </h3>
                 
                 {% if total_predictions > 10 %}
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item bg-transparent px-0">
-                            <h6>Home Advantage</h6>
+                            <h6>Hazai Előny</h6>
                             <p class="small text-muted mb-0">
-                                Home teams performed 8.3% better than predicted, showing a significant home-court advantage.
+                                A hazai csapatok 8.3%-kal jobban teljesítettek az előrejelzéshez képest, jelentős hazai pálya előnyt mutatva.
                             </p>
                         </li>
                         <li class="list-group-item bg-transparent px-0">
-                            <h6>Underdog Value</h6>
+                            <h6>Esélytelen Érték</h6>
                             <p class="small text-muted mb-0">
-                                Teams with < 30% win probability outperformed expectations by 12.5%.
+                                A 30%-nál kisebb győzelmi eséllyel rendelkező csapatok 12.5%-kal túlteljesítették a várakozásokat.
                             </p>
                         </li>
                         <li class="list-group-item bg-transparent px-0">
-                            <h6>High Confidence Predictions</h6>
+                            <h6>Magas Megbízhatóságú Előrejelzések</h6>
                             <p class="small text-muted mb-0">
-                                Predictions with > 75% confidence were accurate 82.4% of the time.
+                                A 75%-nál magasabb megbízhatóságú előrejelzések 82.4%-ban voltak pontosak.
                             </p>
                         </li>
                     </ul>
                 {% else %}
                     <p class="text-muted">
-                        Insights will be generated after at least 10 predictions with results.
+                        A meglátások legalább 10 előrejelzés és eredmény után generálódnak.
                     </p>
                     
                     <div class="alert alert-light border mt-3">
-                        <h6>Example Insight</h6>
+                        <h6>Példa Meglátás</h6>
                         <p class="small text-muted mb-0">
-                            Home teams typically outperform predictions by 5-10% due to home-court advantage.
+                            A hazai csapatok általában 5-10%-kal túlteljesítik az előrejelzéseket a hazai pálya előny miatt.
                         </p>
                     </div>
                 {% endif %}
