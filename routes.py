@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 import pandas as pd
 import os
 import logging
+from sportmonks_api import SportmonksAPI
+from config import DEFAULT_LEAGUES
 
 def init_routes(app):
     @app.route("/")
@@ -197,37 +199,93 @@ def init_routes(app):
             
         return jsonify(prediction_data)
 
-    def load_initial_data():
-        """Load initial team data from CSV files."""
+    @app.route("/fetch-teams-api", methods=["GET"])
+    def fetch_teams_api():
+        """Frissíti a csapatokat a Sportmonks API-ból."""
         try:
-            # Load teams data
-            teams_path = os.path.join("data", "teams.csv")
-            teams_df = pd.read_csv(teams_path)
+            api = SportmonksAPI()
+            teams_data = api.fetch_teams_for_prediction()
             
-            for _, row in teams_df.iterrows():
-                team = Team(
-                    name=row["name"],
-                    abbreviation=row["abbreviation"],
-                    division=row.get("division", ""),
-                    conference=row.get("conference", "")
-                )
-                db.session.add(team)
+            if not teams_data:
+                flash("Nem sikerült adatokat lekérni a Sportmonks API-ból. Ellenőrizd az API tokent.", "danger")
+                return redirect(url_for("index"))
             
-            # Commit teams
+            # Mentjük az új csapatokat
+            count_new = 0
+            for team_data in teams_data:
+                # Ellenőrizzük, hogy már létezik-e a csapat
+                existing_team = Team.query.filter_by(name=team_data["name"]).first()
+                
+                if not existing_team:
+                    team = Team(
+                        name=team_data["name"],
+                        abbreviation=team_data["abbreviation"],
+                        division=team_data["division"],
+                        conference=team_data["conference"]
+                    )
+                    db.session.add(team)
+                    count_new += 1
+            
+            db.session.commit()
+            flash(f"{count_new} új csapat sikeresen hozzáadva a Sportmonks API-ból!", "success")
+            
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Hiba a Sportmonks API adatok betöltésekor: {str(e)}")
+            flash(f"Hiba történt: {str(e)}", "danger")
+            
+        return redirect(url_for("index"))
+
+    def load_initial_data():
+        """Load initial team data from CSV files or API."""
+        try:
+            # Először próbáljuk meg betölteni az adatokat a Sportmonks API-ból
+            api = SportmonksAPI()
+            teams_data = api.fetch_teams_for_prediction()
+            
+            if teams_data:
+                # API adatok sikeresen lekérve
+                for team_data in teams_data:
+                    team = Team(
+                        name=team_data["name"],
+                        abbreviation=team_data["abbreviation"],
+                        division=team_data["division"],
+                        conference=team_data["conference"]
+                    )
+                    db.session.add(team)
+                
+                logging.info("Csapatok sikeresen betöltve a Sportmonks API-ból")
+            else:
+                # Ha az API nem működik, betöltjük a helyi CSV-ből
+                teams_path = os.path.join("data", "teams.csv")
+                teams_df = pd.read_csv(teams_path)
+                
+                for _, row in teams_df.iterrows():
+                    team = Team(
+                        name=row["name"],
+                        abbreviation=row["abbreviation"],
+                        division=row.get("division", ""),
+                        conference=row.get("conference", "")
+                    )
+                    db.session.add(team)
+                
+                logging.info("Csapatok sikeresen betöltve a helyi CSV fájlból")
+            
+            # Mentjük a csapatokat
             db.session.commit()
             
-            # Optionally load some sample game data
+            # Opcionálisan betöltünk minta mérkőzés adatokat
             games_path = os.path.join("data", "sample_game_data.csv")
             if os.path.exists(games_path):
                 games_df = pd.read_csv(games_path)
                 
                 for _, row in games_df.iterrows():
-                    # Get team IDs
+                    # Lekérjük a csapat azonosítókat
                     home_team = Team.query.filter_by(name=row["home_team"]).first()
                     away_team = Team.query.filter_by(name=row["away_team"]).first()
                     
                     if home_team and away_team:
-                        # Create the game
+                        # Létrehozzuk a mérkőzést
                         game_date = datetime.strptime(row["date"], "%Y-%m-%d")
                         game = Game(
                             date=game_date,
@@ -240,8 +298,9 @@ def init_routes(app):
                         db.session.add(game)
                 
                 db.session.commit()
+                logging.info("Minta mérkőzés adatok sikeresen betöltve")
                 
-            logging.info("Initial data loaded successfully")
+            logging.info("Kezdeti adatok sikeresen betöltve")
         except Exception as e:
             db.session.rollback()
-            logging.error(f"Error loading initial data: {str(e)}")
+            logging.error(f"Hiba a kezdeti adatok betöltésekor: {str(e)}")

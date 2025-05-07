@@ -66,10 +66,17 @@
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-lg mt-3">
-                        <i class="fas fa-calculator me-2"></i>
-                        Előrejelzés Készítése
-                    </button>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-calculator me-2"></i>
+                            Előrejelzés Készítése
+                        </button>
+                        
+                        <a href="{{ url_for('fetch_teams_api') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            Csapatok Frissítése API-ból
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
